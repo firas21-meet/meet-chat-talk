@@ -1,26 +1,28 @@
-<!--A Flat Design Login Page by Codelator.com-->
-<html>
-<body>
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html as wtf %}
 
 
-<form id="loginform" method="post" action="#">
-<input type="text" class="input" placeholder="E-mail" name="email" />
-<input type="password" class="input" placeholder="Password" name ="password"/>
-<input type="submit" class="loginbutton" name="submit_button" value="Log_In">
+
+{% block content %}
+<div>
+<form method="post" action="/signup2"  >
+{{ form.hidden_tag() }}
+{{ wtf.form_field(form.username) }}
+ {{ wtf.form_field(form.email) }}
+{{ wtf.form_field(form.password) }}
+    <button class="btn btn-lg btn-primary btn-block" type="submit">sign up</button>
+
 
 
 </form>
-<a href="signup" class="signup_p">Click here for signup page</a>
+</div>
+
+{% endblock %}
+<a href="/login">Click here for login page</a>
 <style>
 @charset "UTF-8";
-/*A Flat Design Login Page by Codelator.com*/
-.signup_p{
-
-  text-decoration: underline;
-    border-style: solid;
 
 
-}
 body{
 	background-color:#2c3335;
 	color:#f5f5f5;
@@ -83,5 +85,4 @@ a{
 	background-color:#e5bf05;
 }
 </style>
-</body>
-</html>
+

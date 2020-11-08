@@ -19,7 +19,7 @@ def query_by_name(their_name):
    Print all the students
    in the database.
    """
-    student = session.query(names).filter_by(name=their_name).first()
+    student = session.query(Names).filter_by(name=their_name).first()
     return student
 
 ######### find info by the name of the student >>>>>
@@ -55,6 +55,23 @@ def delete_student(their_name):
 
 #delete_student("1")
 
+
+## for the names
+def delete_student_id(their_id):
+   """
+   Delete all students with a
+   certain name from the database.
+   """
+   session.query(Names).filter_by(
+       id=their_id).delete()
+   session.commit()
+
+
+#delete_student_id(1)
+
+
+
+
 def query_by_id(their_id):
 
     """
@@ -70,7 +87,7 @@ def for_allStudent():
     z=1
     for i in range(20):
         if z!= 7:
-            print('ID : '+str(query_by_id(z).id)+' ------name: ' + query_by_id(z).name+' password : '+query_by_id(z).password+' email : '+query_by_id(z).email)
+            print('ID :'+str(query_by_id(z).id) +' ------name:' + str(query_by_id(z).name)+' ---password :'+str(query_by_id(z).password)+'----email :'+query_by_id(z).email)
             z+=1
         else:
             z+=1
@@ -79,3 +96,44 @@ def for_allStudent():
 # firas = Names(email="firas@gmail",password="pass",name="firas")
 # session.add(firas)
 # session.commit()
+
+
+def delete_student_id_messages(their_id):
+   """
+   Delete all messages with a
+   certain name from the database.
+   """
+   session.query(Messages).filter_by(
+       id=their_id).delete()
+   session.commit()
+
+
+def delete_messgages():
+    for i in range(200):
+        delete_student_id_messages(i)
+        print(str(i)+" done")
+
+#delete_messgages()
+
+
+def delete_student_name(their_name):
+   """
+   Delete all messages with a
+   certain name from the database.
+   """
+   session.query(Names).filter_by(
+       name=their_name).delete()
+   session.commit()
+
+#delete_student_name('firas')
+
+def delete_student_email(their_email):
+   """
+   Delete all messages with a
+   certain name from the database.
+   """
+   session.query(Names).filter_by(
+       email=their_email).delete()
+   session.commit()
+
+#delete_student_name('firas')

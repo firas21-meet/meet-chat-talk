@@ -1,9 +1,10 @@
+import socketio
 from flask import Flask, flash, redirect, render_template, request, url_for
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, Integer, String
 from wtforms import Form, BooleanField, PasswordField, StringField, validators
 from flask_wtf import FlaskForm
-from wtforms.validators import InputRequired, Length, AnyOf
+from wtforms.validators import InputRequired, Length, AnyOf,Email
 from flask_socketio import SocketIO
 from wtforms.validators import InputRequired, Length, EqualTo, ValidationError
 from sqlalchemy import create_engine
@@ -52,7 +53,7 @@ class registrants(FlaskForm):
                                                              EqualTo('password', message="Passwords must match")])
 
     def validate_username(self, username):
-        user_object = names.query.filter_by(username=username.data).first()
+        user_object = Names.query.filter_by(username=username.data).first()
         if user_object:
             raise ValidationError("Username already exists. Select a different username.")
 
@@ -80,7 +81,7 @@ def test():
 def form():
     if request.method == 'POST':
         if not request.form['email'] or not request.form['password']:
-            registered = names.query.all()
+            registered = Names.query.all()
             return render_template('request.html', registered=registered)
         else:
             entry = Names(email=request.form['email'], password=request.form['password'],name= request.form['name'])
@@ -89,6 +90,35 @@ def form():
             print(request.form['email'] + '' + request.form['password'] + request.form['name'])
             return redirect(url_for('login'))
     return render_template("signup.html")
+
+
+##### atempt
+@app.route('/signup222', methods=['GET', 'POST'])
+def form_2():
+    form = registrants()
+    if form.validate_on_submit():
+        return '<h1>' + form.username.data
+    return render_template("signup2.html", form =form)
+
+@app.route('/admin', methods=['GET', 'POST'])
+def admin():
+
+    form = registrants()
+
+    if request.method == 'POST':
+        req = request.form
+        print("post")
+        if req['submit_button'] == 'Log_In':
+            if form.password.data == '123':
+                delete_messgages()
+
+    return render_template('admin.html', form=form)
+
+
+
+
+
+
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -101,13 +131,16 @@ def login():
         print("post")
         if req['submit_button'] == 'Log_In':
             print(req["email"])
-            user_log = session.query(Names).filter_by(email=form.email.data).first()
-            print("all right")
-            print('user log' + str(user_log.password))
-            print('current' + str(form.password.data))
-            if form.password.data == user_log.password:
-                login_session['username']=user_log.name
-                return render_template(('session.html'), name=login_session['username'], messages=session.query(Messages).all())
+            if session.query(Names).filter_by(email = form.email.data).first() != None:
+                print ('User Exists')
+                user_log = session.query(Names).filter_by(email=form.email.data).first()
+                print("all right")
+                print('user log' + str(user_log.password))
+                print('current' + str(form.password.data))
+                if form.password.data == user_log.password:
+                    login_session['username']=user_log.name
+                    return render_template(('session.html'), name=login_session['username'], messages=session.query(Messages).all())
+
     return render_template('login.html', form=form)
 
 @app.route('/post',methods=['GET','POST'])
